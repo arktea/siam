@@ -1,0 +1,39 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: SIAM SAM Template
+
+Globals:
+  Function:
+    Timeout: 3
+
+Resources:
+  SiamFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: siam/
+      Handler: lambda_handler.handle
+      Runtime: python3.8
+      Events:
+        AddUser:
+          Type: Api
+          Properties:
+            Path: /groups/{id}
+            Method: get
+        AddUserParam:
+          Type: Api
+          Properties:
+            Path: /groups/{id}
+            Method: post
+
+
+
+Outputs:
+  SiamApi:
+    Description: "API Gateway endpoint URL for Prod stage for Siam function"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/groups/"
+  SiamFunction:
+    Description: "Siam Lambda Function ARN"
+    Value: !GetAtt SiamFunction.Arn
+  SiamFunctionIamRole:
+    Description: "Implicit IAM Role created for Siam function"
+    Value: !GetAtt SiamFunctionRole.Arn
