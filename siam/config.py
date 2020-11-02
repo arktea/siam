@@ -1,7 +1,7 @@
 import os
 
 ENV = os.environ.get("ENV", "test")
-TABLE = os.environ.get("TABLE", f"PERMISSION_{ENV}")
+TABLE = os.environ.get("TABLE", f"permission_{ENV}")
 
 DYNAMODB_CONFIG = [
     dict(),

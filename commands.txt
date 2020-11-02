@@ -1,0 +1,19 @@
+# Create docker network
+docker network create sam-network
+
+# Run dynamodb local
+docker run -d --network sam-network --name dynamodb -p 8000:8000 -t amazon/dynamodb-local
+or
+docker start dynamodb
+
+# Create table
+aws dynamodb create-table --endpoint-url http://localhost:8000 --cli-input-json "$(cat create-table.json)"
+
+# Scan items
+aws dynamodb scan --table-name permission_test --endpoint-url http://localhost:8000
+
+# Build
+sam build --use-container
+
+# Start api
+sam local start-api --docker-network sam-network
